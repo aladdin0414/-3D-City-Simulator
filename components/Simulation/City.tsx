@@ -48,6 +48,23 @@ const useWindowTexture = () => {
   }, []);
 };
 
+// Palettes for night lights
+const RESIDENTIAL_COLORS = [
+  '#ffecd1', // Warm White
+  '#ffcc80', // Soft Orange
+  '#fff9c4', // Pale Yellow
+  '#ffe0b2', // Amber
+  '#ffffff', // White
+];
+
+const COMMERCIAL_COLORS = [
+  '#e0f7fa', // Cyan
+  '#e3f2fd', // Cool Blue
+  '#f3e5f5', // Lavender
+  '#f5f5f5', // White
+  '#b2ebf2', // Teal
+];
+
 const Building: React.FC<{ 
   data: BuildingData; 
   isSelected: boolean; 
@@ -58,8 +75,27 @@ const Building: React.FC<{
 }> = ({ data, isSelected, onSelect, isNight, windowTexture, opacity }) => {
   const [hovered, setHovered] = useState(false);
   
-  // Randomly decide if this building is "active" at night
-  const buildingActive = useMemo(() => Math.random() > 0.2, []);
+  // Memoize random properties so they don't change on re-renders
+  const { nightColor, nightIntensity, buildingActive } = useMemo(() => {
+    // 1. Determine if building has lights on (70% chance)
+    const active = Math.random() > 0.3;
+
+    // 2. Select Color Palette based on height (Proxy for building type)
+    const isSkyscraper = data.height > 8;
+    const palette = isSkyscraper ? COMMERCIAL_COLORS : RESIDENTIAL_COLORS;
+    const colorHex = palette[Math.floor(Math.random() * palette.length)];
+    
+    // 3. Randomize Intensity (Some dim, some bright)
+    // Skyscrapers tend to be brighter
+    const baseIntensity = isSkyscraper ? 1.5 : 0.8;
+    const intensity = baseIntensity + Math.random() * 2.0; 
+
+    return { 
+      nightColor: new THREE.Color(colorHex), 
+      nightIntensity: intensity,
+      buildingActive: active
+    };
+  }, [data.height]);
   
   const color = useMemo(() => {
     if (isSelected) return '#3b82f6';
@@ -69,9 +105,8 @@ const Building: React.FC<{
 
   const emissiveColor = useMemo(() => {
     if (isSelected) return new THREE.Color('#3b82f6');
-    // Warm light for windows, or cool blue for skyscrapers
-    return data.height > 8 ? new THREE.Color('#dbeafe') : new THREE.Color('#fef3c7'); 
-  }, [isSelected, data.height]);
+    return nightColor;
+  }, [isSelected, nightColor]);
 
   const baseScale = [data.scale[0] + 0.4, 0.1, data.scale[2] + 0.4];
 
@@ -122,10 +157,10 @@ const Building: React.FC<{
           // Night logic
           emissive={emissiveColor}
           emissiveMap={textureClone}
-          emissiveIntensity={isNight && buildingActive ? (isSelected ? 1 : 2) : 0}
+          emissiveIntensity={isNight && buildingActive ? (isSelected ? 3 : nightIntensity) : 0}
         />
         <Edges 
-          color={isSelected ? "#60a5fa" : (isNight ? "#1e293b" : "#94a3b8")}
+          color={isSelected ? "#60a5fa" : (isNight ? "#334155" : "#94a3b8")}
           threshold={15} 
         />
       </mesh>
