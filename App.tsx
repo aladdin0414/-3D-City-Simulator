@@ -13,6 +13,9 @@ export default function App() {
   // Weather State
   const [weatherMode, setWeatherMode] = useState<WeatherMode>('clear');
   const [intensity, setIntensity] = useState<number>(0.5); // Unified intensity value
+  
+  // Visual State
+  const [buildingOpacity, setBuildingOpacity] = useState<number>(0.9);
 
   // Reset intensity when mode changes to sensible defaults
   useEffect(() => {
@@ -43,6 +46,8 @@ export default function App() {
         setWeatherMode={setWeatherMode}
         intensity={intensity}
         setIntensity={setIntensity}
+        buildingOpacity={buildingOpacity}
+        setBuildingOpacity={setBuildingOpacity}
       />
 
       {/* Selected Building Info Card */}
@@ -95,6 +100,7 @@ export default function App() {
         weatherType={weatherType}
         weatherIntensity={weatherIntensity}
         sunIntensity={sunIntensityMultiplier}
+        buildingOpacity={buildingOpacity}
       />
 
       {/* Controls */}

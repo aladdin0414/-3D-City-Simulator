@@ -8,6 +8,7 @@ interface CityProps {
   onBuildingSelect: (building: BuildingData) => void;
   selectedBuildingId: string | null;
   isNight: boolean;
+  buildingOpacity: number;
 }
 
 // Generate a simple procedural texture for windows
@@ -53,7 +54,8 @@ const Building: React.FC<{
   onSelect: (b: BuildingData) => void; 
   isNight: boolean;
   windowTexture: THREE.CanvasTexture;
-}> = ({ data, isSelected, onSelect, isNight, windowTexture }) => {
+  opacity: number;
+}> = ({ data, isSelected, onSelect, isNight, windowTexture, opacity }) => {
   const [hovered, setHovered] = useState(false);
   
   // Randomly decide if this building is "active" at night
@@ -112,7 +114,7 @@ const Building: React.FC<{
         <meshPhysicalMaterial 
           color={color}
           transparent
-          opacity={0.9}
+          opacity={opacity}
           roughness={0.1}
           metalness={0.1}
           transmission={0.1}
@@ -131,7 +133,7 @@ const Building: React.FC<{
   );
 };
 
-export const City: React.FC<CityProps> = ({ layout, onBuildingSelect, selectedBuildingId, isNight }) => {
+export const City: React.FC<CityProps> = ({ layout, onBuildingSelect, selectedBuildingId, isNight, buildingOpacity }) => {
   
   const windowTexture = useWindowTexture();
 
@@ -158,6 +160,7 @@ export const City: React.FC<CityProps> = ({ layout, onBuildingSelect, selectedBu
           isSelected={selectedBuildingId === b.id}
           isNight={isNight}
           windowTexture={windowTexture}
+          opacity={buildingOpacity}
         />
       ))}
 

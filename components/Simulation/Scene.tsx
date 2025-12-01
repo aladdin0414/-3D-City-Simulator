@@ -19,6 +19,7 @@ interface SceneProps {
   weatherType: WeatherType;
   weatherIntensity: number;
   sunIntensity: number;
+  buildingOpacity: number;
 }
 
 const TimeAnimator: React.FC<{ isPlaying: boolean; setTime: React.Dispatch<React.SetStateAction<number>> }> = ({ isPlaying, setTime }) => {
@@ -43,7 +44,8 @@ export const Scene: React.FC<SceneProps> = ({
   fogDensity,
   weatherType,
   weatherIntensity,
-  sunIntensity
+  sunIntensity,
+  buildingOpacity
 }) => {
   const [cityLayout, setCityLayout] = useState<CityLayout | null>(null);
   const [traffic, setTraffic] = useState<CarData[]>([]);
@@ -72,6 +74,7 @@ export const Scene: React.FC<SceneProps> = ({
         onBuildingSelect={onBuildingSelect}
         selectedBuildingId={selectedBuildingId}
         isNight={isNight}
+        buildingOpacity={buildingOpacity}
       />
       <Traffic 
         initialCars={traffic} 
