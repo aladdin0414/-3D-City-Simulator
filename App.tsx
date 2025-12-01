@@ -22,14 +22,22 @@ export default function App() {
   useEffect(() => {
     if (weatherMode === 'fog') setIntensity(0.02);
     else if (weatherMode === 'clear') setIntensity(1.0);
+    else if (weatherMode === 'wind') setIntensity(0.8); // Default wind speed
     else setIntensity(0.5); // Rain/Snow default
   }, [weatherMode]);
 
   // Derived Simulation Props
-  const fogDensity = weatherMode === 'fog' ? intensity : (weatherMode === 'rain' || weatherMode === 'snow' ? 0.015 : 0);
+  const fogDensity = weatherMode === 'fog' ? intensity : (weatherMode === 'rain' || weatherMode === 'snow' ? 0.015 : 0.005);
   const sunIntensityMultiplier = weatherMode === 'clear' ? intensity : 1.0;
-  const weatherType = weatherMode === 'rain' ? 'rain' : (weatherMode === 'snow' ? 'snow' : 'none');
-  const weatherIntensity = (weatherMode === 'rain' || weatherMode === 'snow') ? intensity : 0;
+  
+  // Map weatherMode to WeatherSystem type
+  let weatherType: 'none' | 'rain' | 'snow' | 'wind' = 'none';
+  if (weatherMode === 'rain') weatherType = 'rain';
+  else if (weatherMode === 'snow') weatherType = 'snow';
+  else if (weatherMode === 'wind') weatherType = 'wind';
+  
+  // Intensity for the WeatherSystem (rain amount, snow amount, wind speed)
+  const weatherIntensity = (weatherMode === 'rain' || weatherMode === 'snow' || weatherMode === 'wind') ? intensity : 0;
 
   const handleResetCamera = () => {
     setResetCameraFlag(prev => prev + 1);

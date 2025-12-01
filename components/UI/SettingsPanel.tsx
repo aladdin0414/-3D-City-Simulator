@@ -1,7 +1,7 @@
 import React from 'react';
-import { CloudRain, CloudSnow, Sun, CloudFog, Layers, RotateCcw } from 'lucide-react';
+import { CloudRain, CloudSnow, Sun, CloudFog, Layers, RotateCcw, Wind } from 'lucide-react';
 
-export type WeatherMode = 'clear' | 'fog' | 'rain' | 'snow';
+export type WeatherMode = 'clear' | 'fog' | 'rain' | 'snow' | 'wind';
 
 interface SettingsPanelProps {
   weatherMode: WeatherMode;
@@ -29,6 +29,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       case 'fog': return 'Fog Density';
       case 'rain': return 'Precipitation';
       case 'snow': return 'Snowfall Amount';
+      case 'wind': return 'Wind Speed';
       default: return 'Intensity';
     }
   };
@@ -36,6 +37,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const getMax = () => {
     switch(weatherMode) {
         case 'fog': return 0.08;
+        case 'wind': return 1.5; // Wind speed can go higher
         default: return 1.0;
     }
   };
@@ -54,7 +56,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </h3>
 
         {/* Weather Mode Selector */}
-        <div className="grid grid-cols-4 gap-2 mb-4">
+        <div className="grid grid-cols-5 gap-2 mb-4">
             <button
               onClick={() => setWeatherMode('clear')}
               title="Clear Sky"
@@ -64,7 +66,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-400 hover:text-white'
               }`}
             >
-              <Sun size={20} />
+              <Sun size={18} />
             </button>
             
             <button
@@ -76,7 +78,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-400 hover:text-white'
               }`}
             >
-              <CloudFog size={20} />
+              <CloudFog size={18} />
             </button>
 
             <button
@@ -88,7 +90,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-400 hover:text-white'
               }`}
             >
-              <CloudRain size={20} />
+              <CloudRain size={18} />
             </button>
 
             <button
@@ -100,7 +102,19 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-400 hover:text-white'
               }`}
             >
-              <CloudSnow size={20} />
+              <CloudSnow size={18} />
+            </button>
+
+            <button
+              onClick={() => setWeatherMode('wind')}
+              title="Wind"
+              className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all border ${
+                weatherMode === 'wind' 
+                  ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/50' 
+                  : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-400 hover:text-white'
+              }`}
+            >
+              <Wind size={18} />
             </button>
         </div>
 
