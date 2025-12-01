@@ -9,6 +9,7 @@ export default function App() {
   const [time, setTime] = useState<number>(12); // Start at noon
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingData | null>(null);
+  const [resetCameraFlag, setResetCameraFlag] = useState<number>(0);
   
   // Weather State
   const [weatherMode, setWeatherMode] = useState<WeatherMode>('clear');
@@ -30,6 +31,10 @@ export default function App() {
   const weatherType = weatherMode === 'rain' ? 'rain' : (weatherMode === 'snow' ? 'snow' : 'none');
   const weatherIntensity = (weatherMode === 'rain' || weatherMode === 'snow') ? intensity : 0;
 
+  const handleResetCamera = () => {
+    setResetCameraFlag(prev => prev + 1);
+  };
+
   return (
     <div className="relative w-full h-full bg-gray-900">
       {/* Header / Overlay Info */}
@@ -48,6 +53,7 @@ export default function App() {
         setIntensity={setIntensity}
         buildingOpacity={buildingOpacity}
         setBuildingOpacity={setBuildingOpacity}
+        onResetCamera={handleResetCamera}
       />
 
       {/* Selected Building Info Card */}
@@ -101,6 +107,7 @@ export default function App() {
         weatherIntensity={weatherIntensity}
         sunIntensity={sunIntensityMultiplier}
         buildingOpacity={buildingOpacity}
+        resetCameraFlag={resetCameraFlag}
       />
 
       {/* Controls */}

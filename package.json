@@ -16,7 +16,8 @@
     "@react-three/postprocessing": "2.16.0",
     "postprocessing": "6.35.0",
     "lucide-react": "0.344.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "three-stdlib": "^2.36.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

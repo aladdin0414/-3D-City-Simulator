@@ -1,5 +1,5 @@
 import React from 'react';
-import { CloudRain, CloudSnow, Sun, CloudFog, Layers } from 'lucide-react';
+import { CloudRain, CloudSnow, Sun, CloudFog, Layers, RotateCcw } from 'lucide-react';
 
 export type WeatherMode = 'clear' | 'fog' | 'rain' | 'snow';
 
@@ -10,6 +10,7 @@ interface SettingsPanelProps {
   setIntensity: (val: number) => void;
   buildingOpacity: number;
   setBuildingOpacity: (val: number) => void;
+  onResetCamera: () => void;
 }
 
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({ 
@@ -18,7 +19,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   intensity,
   setIntensity,
   buildingOpacity,
-  setBuildingOpacity
+  setBuildingOpacity,
+  onResetCamera
 }) => {
   
   const getLabel = () => {
@@ -129,7 +131,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </h3>
         
         {/* Building Opacity Slider */}
-        <div>
+        <div className="mb-4">
           <div className="flex justify-between text-xs mb-2">
             <span>Building Opacity</span>
             <span className="font-mono text-blue-300">{(buildingOpacity * 100).toFixed(0)}%</span>
@@ -144,6 +146,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             className="w-full h-1.5 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400"
           />
         </div>
+
+        <button 
+          onClick={onResetCamera}
+          className="flex items-center justify-center gap-2 w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white transition-colors"
+        >
+          <RotateCcw size={14} /> Reset Camera View
+        </button>
       </div>
 
     </div>

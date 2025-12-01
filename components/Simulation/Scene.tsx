@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stats } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -8,6 +8,7 @@ import { SunSystem } from './SunSystem';
 import { WeatherSystem, WeatherType } from './WeatherSystem';
 import { generateCity, generateTraffic } from '../../utils/cityGenerator';
 import { CityLayout, CarData, BuildingData } from '../../types';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 interface SceneProps {
   time: number;
@@ -20,6 +21,7 @@ interface SceneProps {
   weatherIntensity: number;
   sunIntensity: number;
   buildingOpacity: number;
+  resetCameraFlag: number;
 }
 
 const TimeAnimator: React.FC<{ isPlaying: boolean; setTime: React.Dispatch<React.SetStateAction<number>> }> = ({ isPlaying, setTime }) => {
@@ -45,10 +47,12 @@ export const Scene: React.FC<SceneProps> = ({
   weatherType,
   weatherIntensity,
   sunIntensity,
-  buildingOpacity
+  buildingOpacity,
+  resetCameraFlag
 }) => {
   const [cityLayout, setCityLayout] = useState<CityLayout | null>(null);
   const [traffic, setTraffic] = useState<CarData[]>([]);
+  const controlsRef = useRef<OrbitControlsImpl>(null);
 
   // Simple check for "Night" to toggle lights
   const isNight = time < 6 || time > 18;
@@ -60,6 +64,13 @@ export const Scene: React.FC<SceneProps> = ({
     const cars = generateTraffic(150, layout);
     setTraffic(cars);
   }, []);
+
+  // Handle Camera Reset
+  useEffect(() => {
+    if (resetCameraFlag > 0 && controlsRef.current) {
+      controlsRef.current.reset();
+    }
+  }, [resetCameraFlag]);
 
   if (!cityLayout) return <div className="text-white">Loading City...</div>;
 
@@ -90,6 +101,7 @@ export const Scene: React.FC<SceneProps> = ({
       />
       
       <OrbitControls 
+        ref={controlsRef}
         enableDamping 
         dampingFactor={0.05} 
         minPolarAngle={0} 
