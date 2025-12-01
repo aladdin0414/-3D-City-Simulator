@@ -1,0 +1,5 @@
+{
+  "name": "UrbanPulse - 3D City Simulator",
+  "description": "A 3D architectural visualization of a city with white-model aesthetics, real-time traffic simulation, and dynamic day/night cycles controllable via a timeline.",
+  "requestFramePermissions": []
+}
