@@ -89,8 +89,9 @@ export const SunSystem: React.FC<SunSystemProps> = ({ time, fogDensity, intensit
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
       )}
       
-      {/* City Fog */}
-      <fog attach="fog" args={[fogColor, 0.002]} density={fogDensity} />
+      {/* City Fog - Use fogExp2 for density control */}
+      {/* We pass a low default density to args to initialize, then control via density prop */}
+      <fogExp2 attach="fog" args={[fogColor, 0.002]} density={fogDensity} />
     </>
   );
 };
